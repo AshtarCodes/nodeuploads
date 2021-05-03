@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 // Init Upload
 const upload = multer({
   storage: storage,
-  limits:{fileSize: 1000000},
+  limits:{fileSize: 100000000},
   fileFilter: function(req, file, cb){
     checkFileType(file, cb);
   }
@@ -23,7 +23,7 @@ const upload = multer({
 // Check File Type
 function checkFileType(file, cb){
   // Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
+  const filetypes = /jpeg|jpg|png|gif|mp4/;
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   // Check mime
@@ -61,13 +61,14 @@ app.post('/upload', (req, res) => {
       } else {
         res.render('index', {
           msg: 'File Uploaded!',
-          file: `uploads/${req.file.filename}`
+          file: `uploads/${req.file.filename}`,
+          embed: req.body.clip
         });
       }
     }
   });
 });
 
-const port = 3000;
+const port = 4000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
