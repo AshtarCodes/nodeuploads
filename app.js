@@ -65,7 +65,7 @@ app.post('/upload', (req, res) => {
         res.render('index', {
           msg: 'File Uploaded!',
           file: `uploads/${req.file.filename}`,
-          embed: convertTwitchClip(req.body.clip, 'https://twitch-embed-ash.herokuapp.com/')
+          embed: convertTwitchClip(req.body.clip, 'https://twitch-embed-ash.herokuapp.com/upload')
         });
       }
     }
