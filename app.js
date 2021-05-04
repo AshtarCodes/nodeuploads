@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const ejs = require('ejs');
 const path = require('path');
+const url = require('url')
 
 // Set The Storage Engine
 const storage = multer.diskStorage({
@@ -48,7 +49,9 @@ app.use(express.static('./public'));
 app.get('/', (req, res) => res.render('index'));
 
 app.post('/upload', (req, res) => {
+  
   upload(req, res, (err) => {
+    console.log(convertTwitchClip(req.body.clip, 'https://twitch-embed-ash.herokuapp.com/'))
     if(err){
       res.render('index', {
         msg: err
@@ -62,13 +65,34 @@ app.post('/upload', (req, res) => {
         res.render('index', {
           msg: 'File Uploaded!',
           file: `uploads/${req.file.filename}`,
-          embed: req.body.clip
+          embed: convertTwitchClip(req.body.clip, 'https://twitch-embed-ash.herokuapp.com/')
         });
       }
     }
   });
 });
-
+// goal: to filter for a twitch clip and modify the parent query param on it
+function videoOrigin (videoURL){
+  let origin = new URL(videoURL).hostname
+  return origin;
+}
+function convertTwitchClip (videoURL, parent) {
+  const url = new URL(videoURL)
+  let embeddableURL;
+  if (url.hostname === 'clips.twitch.tv'){
+    // if it's an embed link in the following format: https://clips.twitch.tv/embed?clip=CleverDependablePoultryLitFam-_dTbDHINZ38jB7eg&parent=localhost:3000
+    embeddableURL = `${url.origin + url.pathname + url.searchParams.get("clip")}&parent=${parent}`
+    // embeddableURL must have an SSL certificate for twitch embeds
+    return embeddableURL;
+  } else if (url.hostname === 'www.twitch.tv'){
+    // if it's a stadard clip link in the following format: https://www.twitch.tv/learnwithleon/clip/CleverDependablePoultryLitFam-_dTbDHINZ38jB7eg
+    let pathnames = url.pathname;
+    let pathnamesArr = String(pathnames).split('/') 
+    let clipParam = pathnamesArr[pathnamesArr.length-1] 
+    embeddableURL = `https://clips.twitch.tv/embed?clip=${clipParam}&parent=${parent}`
+    return embeddableURL;
+  }
+}
 const port = process.env.PORT || 4000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

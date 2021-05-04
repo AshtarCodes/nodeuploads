@@ -32,7 +32,9 @@
     </form>
     <br>
     <img src="<%= typeof file != 'undefined' ? file : '' %>" class="responsive-img">
-    <div class="responsive-video"><iframe src="<%= typeof embed != 'undefined' ? embed : '' %>" class=""></iframe></div>
+    <div class="responsive-video">
+      <iframe src="<%= typeof embed != 'undefined' ? embed : '' %>" class=""></iframe>
+    </div>
   </div>
 
   <script
