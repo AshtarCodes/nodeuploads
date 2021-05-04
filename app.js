@@ -51,7 +51,7 @@ app.get('/', (req, res) => res.render('index'));
 app.post('/upload', (req, res) => {
   
   upload(req, res, (err) => {
-    console.log(convertTwitchClip(req.body.clip, 'twitch-embed-ash.herokuapp.com', 'https://twitch-embed-ash.herokuapp.com/upload','twitch-embed-ash.herokuapp.com/upload','www.twitch-embed-ash.herokuapp.com/upload'))
+    console.log(convertTwitchClip(req.body.clip, 'https://twitch-embed-ash.herokuapp.com/'))
     if(err){
       res.render('index', {
         msg: err
@@ -65,7 +65,7 @@ app.post('/upload', (req, res) => {
         res.render('index', {
           msg: 'File Uploaded!',
           file: `uploads/${req.file.filename}`,
-          embed: convertTwitchClip(req.body.clip, 'twitch-embed-ash.herokuapp.com', 'https://twitch-embed-ash.herokuapp.com/upload','twitch-embed-ash.herokuapp.com/upload','www.twitch-embed-ash.herokuapp.com/upload')
+          embed: convertTwitchClip(req.body.clip, 'www.twitch-embed-ash.herokuapp.com', 'twitch-embed-ash.herokuapp.com')
         });
       }
     }
