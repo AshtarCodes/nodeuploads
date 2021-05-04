@@ -33,7 +33,12 @@
     <br>
     <img src="<%= typeof file != 'undefined' ? file : '' %>" class="responsive-img">
     <div class="responsive-video">
-      <iframe src="<%= typeof embed != 'undefined' ? embed : '' %>" class=""></iframe>
+      <iframe 
+        src="<%= typeof embed != 'undefined' ? embed : '' %>" 
+        height="300"
+        width="400"
+        allowfullscreen="true">
+      </iframe>
     </div>
   </div>
 
